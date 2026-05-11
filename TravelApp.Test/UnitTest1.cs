@@ -1,22 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using TravelApp.Entity;
 
 namespace TravelApp.Test;
 
 public class UnitTest1
 {
-    private TravelDbContext GetDbContext()
+    private static TravelDbContext GetDbContext()
     {
         var options = new DbContextOptionsBuilder<TravelDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
+
         return new TravelDbContext(options);
     }
 
     [Fact]
     public async Task CRUD_Operations_Work()
     {
-        var db = GetDbContext();
-        var todosApi = new TodosApi(db);
+        await using var db = GetDbContext();
+        var todosApi = new TodosService(db);
 
         // Create
         var newTodo = new Todo { Title = "Test Todo", IsComplete = false };
@@ -32,6 +34,7 @@ public class UnitTest1
         fetched.Title = "Updated Title";
         await todosApi.UpdateTodo(fetched);
         var updated = await todosApi.GetTodoById(created.Id);
+        Assert.NotNull(updated);
         Assert.Equal("Updated Title", updated.Title);
 
         // Delete

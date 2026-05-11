@@ -1,10 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using TravelApp.Entity;
 
-public class TravelDbContext : DbContext
+namespace TravelApp;
+
+public class TravelDbContext(DbContextOptions<TravelDbContext> options) : DbContext(options)
 {
-    public TravelDbContext(DbContextOptions<TravelDbContext> options) : base(options)
-    {
-    }
-
     public DbSet<Todo> Todos => Set<Todo>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Todo>()
+            .Property(todo => todo.Title)
+            .HasMaxLength(Todo.MaxTitleLength);
+    }
 }
