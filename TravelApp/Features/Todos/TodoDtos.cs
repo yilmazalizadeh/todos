@@ -1,4 +1,10 @@
-namespace TravelApp.Dtos;
+namespace TravelApp.Features.Todos;
+
+public sealed record TodoDto(
+    int Id,
+    string Title,
+    DateOnly? DueBy,
+    bool IsComplete);
 
 public sealed record CreateTodoDto(
     string? Title,

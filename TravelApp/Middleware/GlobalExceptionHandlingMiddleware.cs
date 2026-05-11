@@ -1,4 +1,5 @@
 using System.Runtime.ExceptionServices;
+using TravelApp.Dtos;
 using TravelApp.Exceptions;
 
 namespace TravelApp.Middleware;
@@ -53,5 +54,3 @@ public sealed class GlobalExceptionHandlingMiddleware(
         await context.Response.WriteAsJsonAsync(new ErrorResponse(error, type));
     }
 }
-
-public sealed record ErrorResponse(string Error, string Type);

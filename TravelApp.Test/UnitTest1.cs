@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using TravelApp.Dtos;
 using TravelApp.Entity;
 using TravelApp.Exceptions;
+using TravelApp.Features.Todos;
 
 namespace TravelApp.Test;
 
@@ -20,7 +20,7 @@ public class UnitTest1
     public async Task CRUD_Operations_Work()
     {
         await using var db = GetDbContext();
-        var todosApi = new TodosService(db);
+        var todosApi = new TodosService(db, new TodoValidator());
 
         // Create
         var newTodo = new CreateTodoDto("Test Todo");
@@ -45,7 +45,7 @@ public class UnitTest1
     public async Task GetTodoById_Throws_WhenTodoDoesNotExist()
     {
         await using var db = GetDbContext();
-        var todosApi = new TodosService(db);
+        var todosApi = new TodosService(db, new TodoValidator());
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(() => todosApi.GetTodoById(123));
 
@@ -59,7 +59,7 @@ public class UnitTest1
     public async Task CreateTodo_Throws_WhenTitleIsEmpty(string? title)
     {
         await using var db = GetDbContext();
-        var todosApi = new TodosService(db);
+        var todosApi = new TodosService(db, new TodoValidator());
 
         var exception = await Assert.ThrowsAsync<ValidationException>(() =>
             todosApi.CreateTodo(new CreateTodoDto(title)));
@@ -71,7 +71,7 @@ public class UnitTest1
     public async Task CreateTodo_Throws_WhenTitleIsTooLong()
     {
         await using var db = GetDbContext();
-        var todosApi = new TodosService(db);
+        var todosApi = new TodosService(db, new TodoValidator());
         var title = new string('A', Todo.MaxTitleLength + 1);
 
         var exception = await Assert.ThrowsAsync<ValidationException>(() =>
