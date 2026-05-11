@@ -1,10 +1,17 @@
 using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore;
 using TodoService;
+using TodoService.Common.Configuration.Vault;
 using TodoService.Common.Middleware;
 using TodoService.Features.Todos;
 
 var builder = WebApplication.CreateSlimBuilder(args);
+
+// Pull secrets (e.g. ConnectionStrings__TodoDb) from Vault when VAULT_ADDR /
+// VAULT_TOKEN are set. In local dev they typically aren't, so this is a no-op
+// and the connection string comes from .env.local / user secrets / appsettings.
+builder.Configuration.AddVaultIfConfigured(builder.Environment.EnvironmentName);
+
 var connectionString = builder.Configuration.GetConnectionString("TodoDb")
     ?? "Host=localhost;Port=5432;Database=todoservice;Username=todoservice;Password=todoservice_password";
 
