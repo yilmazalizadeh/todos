@@ -1,0 +1,13 @@
+.git
+.idea
+.vs
+**/bin/
+**/obj/
+**/.user
+**/*.DotSettings.user
+**/TestResults/
+**/coverage/
+Dockerfile*
+docker-compose*.yml
+docker-compose*.yaml
+README.md

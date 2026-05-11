@@ -4,12 +4,12 @@ using TravelApp;
 using TravelApp.Common.Middleware;
 using TravelApp.Features.Todos;
 
-const string connectionString = "Data Source=travel.db";
-
 var builder = WebApplication.CreateSlimBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("TravelDb")
+    ?? "Host=localhost;Port=5432;Database=travelapp;Username=travelapp;Password=travelapp_password";
 
 builder.Services.AddDbContext<TravelDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseNpgsql(connectionString));
 
 builder.Services.Configure<RouteOptions>(options =>
     options.SetParameterPolicy<RegexInlineRouteConstraint>("regex"));
