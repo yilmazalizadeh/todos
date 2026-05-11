@@ -1,8 +1,8 @@
 using System.Runtime.ExceptionServices;
-using TravelApp.Dtos;
-using TravelApp.Exceptions;
+using TravelApp.Common.Dtos;
+using TravelApp.Common.Exceptions;
 
-namespace TravelApp.Middleware;
+namespace TravelApp.Common.Middleware;
 
 public sealed class GlobalExceptionHandlingMiddleware(
     RequestDelegate next,

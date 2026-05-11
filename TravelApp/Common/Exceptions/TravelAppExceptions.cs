@@ -1,4 +1,4 @@
-﻿namespace TravelApp.Exceptions;
+namespace TravelApp.Common.Exceptions;
 
 public abstract class TravelAppException(string message) : Exception(message);
 

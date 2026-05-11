@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TravelApp.Entity;
+using TravelApp.Features.Todos;
 
 namespace TravelApp;
 

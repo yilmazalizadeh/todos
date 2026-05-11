@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TravelApp.Entity;
-using TravelApp.Exceptions;
+using TravelApp.Common.Exceptions;
 using TravelApp.Features.Todos;
 
 namespace TravelApp.Test;

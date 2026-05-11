@@ -1,5 +1,3 @@
-using TravelApp.Entity;
-
 namespace TravelApp.Features.Todos;
 
 public static class TodoMapper

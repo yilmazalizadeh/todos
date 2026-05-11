@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TravelApp.Exceptions;
+using TravelApp.Common.Exceptions;
 
 namespace TravelApp.Features.Todos;
 

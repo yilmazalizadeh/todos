@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TravelApp.Entity;
+namespace TravelApp.Features.Todos;
 
 public class Todo
 {

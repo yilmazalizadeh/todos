@@ -1,5 +1,4 @@
-using TravelApp.Entity;
-using TravelApp.Exceptions;
+using TravelApp.Common.Exceptions;
 
 namespace TravelApp.Features.Todos;
 

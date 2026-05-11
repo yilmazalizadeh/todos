@@ -1,3 +1,3 @@
-namespace TravelApp.Dtos;
+namespace TravelApp.Common.Dtos;
 
 public sealed record ErrorResponse(string Error, string Type);

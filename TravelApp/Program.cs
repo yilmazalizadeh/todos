@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore;
 using TravelApp;
+using TravelApp.Common.Middleware;
 using TravelApp.Features.Todos;
-using TravelApp.Middleware;
 
 const string connectionString = "Data Source=travel.db";
 

@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using TravelApp.Dtos;
+using TravelApp.Common.Dtos;
 using TravelApp.Features.Todos;
 
 namespace TravelApp;
