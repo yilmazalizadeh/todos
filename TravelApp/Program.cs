@@ -1,8 +1,10 @@
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore;
 using TravelApp;
+using TravelApp.Dtos;
 using TravelApp.Entity;
+using TravelApp.Middleware;
 
 const string connectionString = "Data Source=travel.db";
 
@@ -10,6 +12,9 @@ var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.AddDbContext<TravelDbContext>(options =>
     options.UseSqlite(connectionString));
+
+builder.Services.Configure<RouteOptions>(options =>
+    options.SetParameterPolicy<RegexInlineRouteConstraint>("regex"));
 
 builder.Services.AddScoped<TodosService>();
 
@@ -24,6 +29,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -40,27 +47,24 @@ if (app.Environment.IsDevelopment())
 
 var todosGroup = app.MapGroup("/todos");
 
-todosGroup.MapGet("/", async (TodosService todosService) => 
+todosGroup.MapGet("/", async (TodosService todosService) =>
     await todosService.GetTodos())
     .WithName("GetTodos");
 
-todosGroup.MapGet("/{id:int}", async Task<Results<Ok<Todo>, NotFound>> (int id, TodosService todosService) =>
-        await todosService.GetTodoById(id) is { } todo
-            ? TypedResults.Ok(todo)
-            : TypedResults.NotFound())
+todosGroup.MapGet("/{id:int}", async Task<Ok<Todo>> (int id, TodosService todosService) =>
+        TypedResults.Ok(await todosService.GetTodoById(id)))
     .WithName("GetTodoById");
 
-todosGroup.MapPost("/", async (Todo todo, TodosService todosService) =>
+todosGroup.MapPost("/", async (CreateTodoDto todo, TodosService todosService) =>
 {
-    await todosService.CreateTodo(todo);
-    return TypedResults.Created($"/todos/{todo.Id}", todo);
+    var createdTodo = await todosService.CreateTodo(todo);
+    return TypedResults.Created($"/todos/{createdTodo.Id}", createdTodo);
 })
 .WithName("CreateTodo");
 
-todosGroup.MapPut("/{id:int}", async (int id, Todo todo, TodosService todosService) =>
+todosGroup.MapPut("/{id:int}", async (int id, UpdateTodoDto todo, TodosService todosService) =>
 {
-    if (id != todo.Id) return Results.BadRequest();
-    await todosService.UpdateTodo(todo);
+    await todosService.UpdateTodo(id, todo);
     return Results.NoContent();
 })
 .WithName("UpdateTodo");
@@ -73,9 +77,3 @@ todosGroup.MapDelete("/{id:int}", async (int id, TodosService todosService) =>
 .WithName("DeleteTodo");
 
 app.Run();
-
-[JsonSerializable(typeof(List<Todo>))]
-[JsonSerializable(typeof(Todo))]
-internal partial class AppJsonSerializerContext : JsonSerializerContext
-{
-}

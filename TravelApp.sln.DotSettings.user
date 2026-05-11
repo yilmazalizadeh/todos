@@ -6,6 +6,6 @@
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7ce84f90_002D6ae2_002D4e9e_002D860e_002Deb90f45871f3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Junie Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;ProjectFile&gt;6F1CC8E0-A8C8-4F4C-89BC-ADA1FC383530/f:UnitTest1.cs&lt;/ProjectFile&gt;&#xD;
+  &lt;Project Location="C:\Repos\dotnet10\TravelApp\TravelApp.Test" Presentation="&amp;lt;TravelApp.Test&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	</wpf:ResourceDictionary>
