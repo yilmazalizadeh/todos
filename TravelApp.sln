@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelApp", "TravelApp\TravelApp.csproj", "{CBAD9336-1CF0-465D-AEF1-706B54474BED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelApp.Test", "TravelApp.Test\TravelApp.Test.csproj", "{6F1CC8E0-A8C8-4F4C-89BC-ADA1FC383530}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBAD9336-1CF0-465D-AEF1-706B54474BED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBAD9336-1CF0-465D-AEF1-706B54474BED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBAD9336-1CF0-465D-AEF1-706B54474BED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBAD9336-1CF0-465D-AEF1-706B54474BED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F1CC8E0-A8C8-4F4C-89BC-ADA1FC383530}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F1CC8E0-A8C8-4F4C-89BC-ADA1FC383530}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F1CC8E0-A8C8-4F4C-89BC-ADA1FC383530}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F1CC8E0-A8C8-4F4C-89BC-ADA1FC383530}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
