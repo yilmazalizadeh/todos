@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using TodoService.Common.Exceptions;
 using TodoService.Features.Todos;
 
-namespace TodoService.Test;
+namespace TodoService.UnitTests.Features.Todos;
 
-public class UnitTest1
+public class TodoValidatorTests
 {
     private static TodoDbContext GetDbContext()
     {
@@ -13,42 +13,6 @@ public class UnitTest1
             .Options;
 
         return new TodoDbContext(options);
-    }
-
-    [Fact]
-    public async Task CRUD_Operations_Work()
-    {
-        await using var db = GetDbContext();
-        var todosApi = new TodosService(db, new TodoValidator());
-
-        // Create
-        var newTodo = new CreateTodoDto("Test Todo");
-        var created = await todosApi.CreateTodo(newTodo);
-        Assert.NotEqual(0, created.Id);
-
-        // Read
-        var fetched = await todosApi.GetTodoById(created.Id);
-        Assert.Equal("Test Todo", fetched.Title);
-
-        // Update
-        await todosApi.UpdateTodo(fetched.Id, new UpdateTodoDto("Updated Title", fetched.DueBy, fetched.IsComplete));
-        var updated = await todosApi.GetTodoById(created.Id);
-        Assert.Equal("Updated Title", updated.Title);
-
-        // Delete
-        await todosApi.DeleteTodo(created.Id);
-        await Assert.ThrowsAsync<NotFoundException>(() => todosApi.GetTodoById(created.Id));
-    }
-
-    [Fact]
-    public async Task GetTodoById_Throws_WhenTodoDoesNotExist()
-    {
-        await using var db = GetDbContext();
-        var todosApi = new TodosService(db, new TodoValidator());
-
-        var exception = await Assert.ThrowsAsync<NotFoundException>(() => todosApi.GetTodoById(123));
-
-        Assert.Equal("Todo with ID 123 was not found.", exception.Message);
     }
 
     [Theory]
