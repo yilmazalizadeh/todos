@@ -7,10 +7,10 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends curl jq \
     && rm -rf /var/lib/apt/lists/*
 
-COPY TravelApp.sln ./
-COPY TravelApp/TravelApp.csproj TravelApp/
-COPY TravelApp.Test/TravelApp.Test.csproj TravelApp.Test/
-RUN dotnet restore TravelApp.sln
+COPY TodoService.sln ./
+COPY Services/TodoService/TodoService.csproj Services/TodoService/
+COPY TodoService.Test/TodoService.Test.csproj TodoService.Test/
+RUN dotnet restore TodoService.sln
 
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV ASPNETCORE_URLS=http://+:8080
@@ -23,4 +23,4 @@ COPY scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["dotnet", "watch", "--project", "TravelApp/TravelApp.csproj", "run", "--no-launch-profile", "--urls", "http://0.0.0.0:8080"]
+CMD ["dotnet", "watch", "--project", "Services/TodoService/TodoService.csproj", "run", "--no-launch-profile", "--urls", "http://0.0.0.0:8080"]

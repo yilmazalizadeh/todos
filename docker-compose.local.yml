@@ -1,15 +1,17 @@
+name: todoservice
+
 services:
   nginx:
     image: nginx:1.27-alpine
     depends_on:
-      travelapp:
+      todoservice:
         condition: service_started
     ports:
-      - "${TRAVELAPP_LOCAL_PORT:-8080}:80"
+      - "${TODOSERVICE_LOCAL_PORT:-8080}:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
 
-  travelapp:
+  todoservice:
     build:
       context: .
       dockerfile: Dockerfile.local
@@ -29,22 +31,22 @@ services:
       - "8080"
     volumes:
       - .:/src
-      - travelapp-nuget-cache:/root/.nuget/packages
+      - todoservice-nuget-cache:/root/.nuget/packages
     working_dir: /src
-    command: dotnet watch --project TravelApp/TravelApp.csproj run --no-launch-profile --urls http://0.0.0.0:8080
+    command: dotnet watch --project Services/TodoService/TodoService.csproj run --no-launch-profile --urls http://0.0.0.0:8080
 
   postgres:
     image: postgres:17-alpine
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-travelapp}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-travelapp_password}
+      POSTGRES_USER: ${POSTGRES_USER:-todoservice}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-todoservice_password}
     ports:
       - "${POSTGRES_LOCAL_PORT:-5432}:5432"
     volumes:
       - postgres-local-data:/var/lib/postgresql/data
       - ./postgres/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-travelapp} -d travelapp_dev"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-todoservice} -d todoservice_dev"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -78,10 +80,10 @@ services:
       - sh
       - -c
       - |
-        vault kv put secret/travelapp/dev ConnectionStrings__TravelDb="Host=postgres;Port=5432;Database=travelapp_dev;Username=${POSTGRES_USER:-travelapp};Password=${POSTGRES_PASSWORD:-travelapp_password}"
-        vault kv put secret/travelapp/staging ConnectionStrings__TravelDb="Host=postgres;Port=5432;Database=travelapp_staging;Username=${POSTGRES_USER:-travelapp};Password=${POSTGRES_PASSWORD:-travelapp_password}"
-        vault kv put secret/travelapp/prod ConnectionStrings__TravelDb="Host=postgres;Port=5432;Database=travelapp_prod;Username=${POSTGRES_USER:-travelapp};Password=${POSTGRES_PASSWORD:-travelapp_password}"
+        vault kv put secret/todoservice/dev ConnectionStrings__TodoDb="Host=postgres;Port=5432;Database=todoservice_dev;Username=${POSTGRES_USER:-todoservice};Password=${POSTGRES_PASSWORD:-todoservice_password}"
+        vault kv put secret/todoservice/staging ConnectionStrings__TodoDb="Host=postgres;Port=5432;Database=todoservice_staging;Username=${POSTGRES_USER:-todoservice};Password=${POSTGRES_PASSWORD:-todoservice_password}"
+        vault kv put secret/todoservice/prod ConnectionStrings__TodoDb="Host=postgres;Port=5432;Database=todoservice_prod;Username=${POSTGRES_USER:-todoservice};Password=${POSTGRES_PASSWORD:-todoservice_password}"
 
 volumes:
   postgres-local-data:
-  travelapp-nuget-cache:
+  todoservice-nuget-cache:

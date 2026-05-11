@@ -1,6 +1,6 @@
-# TravelApp
+# TodoService
 
-TravelApp is a small .NET 10 minimal API microservice. It uses PostgreSQL for persistence, HashiCorp Vault for environment-specific configuration, Entity Framework Core for data access, Nginx as the container ingress proxy, Swagger/OpenAPI for API discovery, and a vertical-slice folder structure for feature code.
+TodoService is a small .NET 10 minimal API microservice. It uses PostgreSQL for persistence, HashiCorp Vault for environment-specific configuration, Entity Framework Core for data access, Nginx as the container ingress proxy, Swagger/OpenAPI for API discovery, and a vertical-slice folder structure for feature code.
 
 ## Running the Service
 
@@ -15,7 +15,7 @@ dotnet test
 Run the API:
 
 ```powershell
-dotnet run --project TravelApp
+dotnet run --project Services/TodoService/TodoService.csproj
 ```
 
 In development, Swagger UI is available at:
@@ -31,7 +31,7 @@ When running through Docker Compose, PostgreSQL and Vault are started as separat
 Production/CI image build:
 
 ```powershell
-docker build -t travelapp:latest .
+docker build -t todoservice:latest .
 ```
 
 Run the production-style compose file:
@@ -68,9 +68,9 @@ docker compose up --build
 Supported seeded paths:
 
 ```text
-secret/travelapp/dev
-secret/travelapp/staging
-secret/travelapp/prod
+secret/todoservice/dev
+secret/todoservice/staging
+secret/todoservice/prod
 ```
 
 Container files:
@@ -91,7 +91,7 @@ Both compose files run these services:
 
 ```text
 nginx        Publishes the host port and proxies traffic to the API container
-travelapp    Runs the .NET API inside the Docker network
+todoservice    Runs the .NET API inside the Docker network
 postgres     Stores application data in a Docker volume
 vault        Stores environment-specific application settings
 vault-init   Seeds dev, staging, and prod settings into Vault
@@ -108,36 +108,37 @@ VAULT_ENVIRONMENT=prod
 The entrypoint then loads this key from Vault and exports it for ASP.NET Core configuration:
 
 ```text
-ConnectionStrings__TravelDb
+ConnectionStrings__TodoDb
 ```
 
 ## Project Structure
 
 ```text
-TravelApp/
-  Program.cs
-  AppJsonSerializerContext.cs
-  TravelDbContext.cs
+Services/
+  TodoService/
+    Program.cs
+    AppJsonSerializerContext.cs
+    TodoDbContext.cs
 
-  Common/
-    Dtos/
-      ErrorResponse.cs
-    Exceptions/
-      TravelAppExceptions.cs
-    Middleware/
-      GlobalExceptionHandlingMiddleware.cs
+    Common/
+      Dtos/
+        ErrorResponse.cs
+      Exceptions/
+        TodoServiceExceptions.cs
+      Middleware/
+        GlobalExceptionHandlingMiddleware.cs
 
-  Features/
-    Todos/
-      README.md
-      Todo.cs
-      TodoDtos.cs
-      TodoEndpoints.cs
-      TodosService.cs
-      ITodosService.cs
-      TodoValidator.cs
-      ITodoValidator.cs
-      TodoMapper.cs
+    Features/
+      Todos/
+        README.md
+        Todo.cs
+        TodoDtos.cs
+        TodoEndpoints.cs
+        TodosService.cs
+        ITodosService.cs
+        TodoValidator.cs
+        ITodoValidator.cs
+        TodoMapper.cs
 ```
 
 ## Vertical Slice Pattern
@@ -152,7 +153,7 @@ Cross-cutting code that is not specific to a single feature lives under `Common`
 
 Configures dependency injection, EF Core PostgreSQL, source-generated JSON serialization, Swagger, global exception middleware, and feature endpoint registration.
 
-`TravelDbContext.cs`
+`TodoDbContext.cs`
 
 Defines the EF Core database context and registered feature tables.
 
@@ -166,7 +167,7 @@ Registers API DTO types for `System.Text.Json` source generation.
 
 Defines the shared JSON error response contract.
 
-`Common/Exceptions/TravelAppExceptions.cs`
+`Common/Exceptions/TodoServiceExceptions.cs`
 
 Defines the base application exception and shared exception types.
 
@@ -178,4 +179,4 @@ Catches unhandled exceptions globally and converts known application exceptions 
 
 Feature-specific documentation lives with each feature slice.
 
-- [Todos](TravelApp/Features/Todos/README.md)
+- [Todos](Services/TodoService/Features/Todos/README.md)
